@@ -97,7 +97,7 @@ void fDisk::createPartition(string size, string unit, string name, string path, 
     FILE *bfile2 = fopen(path.c_str(), "rb+");
     if (bfile2 != NULL)
     {
-        rewind(bfile2);
+        fseek(bfile2, 0, SEEK_SET);
         fread(&discoEditar, sizeof(discoEditar), 1, bfile2);
     }
     else
@@ -227,16 +227,16 @@ void fDisk::createPartition(string size, string unit, string name, string path, 
 
     if (!discoLLeno && !tamanioPasado)
     {
-        FILE *bfile = fopen(path.c_str(), "wb");
+        FILE *bfile = fopen(path.c_str(), "rb+");
         if (bfile != NULL)
         {
-            rewind(bfile);
+            fseek(bfile, 0, SEEK_SET);
             fwrite(&discoEditar, sizeof(Structs::MBR), 1, bfile);
 
             //Crea primer EBR. - Siempre lo crea.
             if (part_startExtendida != 0)
             {
-                rewind(bfile);
+                fseek(bfile, 0, SEEK_SET);
                 Structs::EBR logica;
                 logica.part_start = part_startExtendida;
                 strcpy(logica.name, "AhPerro");
@@ -263,7 +263,7 @@ void fDisk::createPartition(string size, string unit, string name, string path, 
                 FILE *bfilel = fopen(path.c_str(), "rb+");
                 if (bfilel != NULL)
                 {
-                    rewind(bfilel);
+                    fseek(bfilel, 0, SEEK_SET);
                     fseek(bfilel, discoEditar.mbr_particiones[i].part_start, SEEK_SET);
                     fread(&logicaR, sizeof(Structs::EBR), 1, bfilel);
                 }
@@ -300,7 +300,7 @@ void fDisk::deleteParticion(string cdelete, string path, string name)
             FILE *bfile2 = fopen(path.c_str(), "rb+");
             if (bfile2 != NULL)
             {
-                rewind(bfile2);
+                fseek(bfile2, 0, SEEK_SET);
                 fread(&discoEditar, sizeof(discoEditar), 1, bfile2);
 
                 //ELIMINANDO FAST
@@ -326,7 +326,7 @@ void fDisk::deleteParticion(string cdelete, string path, string name)
                     }
                 }
 
-                rewind(bfile2);
+                fseek(bfile2, 0, SEEK_SET);
                 fwrite(&discoEditar, sizeof(Structs::MBR), 1, bfile2);
             }
             else
@@ -343,7 +343,7 @@ void fDisk::deleteParticion(string cdelete, string path, string name)
             FILE *bfile2 = fopen(path.c_str(), "rb+");
             if (bfile2 != NULL)
             {
-                rewind(bfile2);
+                fseek(bfile2, 0, SEEK_SET);
                 fread(&discoEditar, sizeof(discoEditar), 1, bfile2);
 
                 //ELIMINANDO FULL
@@ -375,7 +375,7 @@ void fDisk::deleteParticion(string cdelete, string path, string name)
                     }
                 }
 
-                rewind(bfile2);
+                fseek(bfile2, 0, SEEK_SET);
                 fwrite(&discoEditar, sizeof(Structs::MBR), 1, bfile2);
             }
             else
@@ -421,7 +421,7 @@ void fDisk::addParticion(string add, string unit, string name, string path)
     FILE *bfile2 = fopen(path.c_str(), "rb+");
     if (bfile2 != NULL)
     {
-        rewind(bfile2);
+        fseek(bfile2, 0, SEEK_SET);
         fread(&discoEditar, sizeof(Structs::MBR), 1, bfile2);
 
         for (int i = 0; i < 4; i++)
@@ -464,7 +464,7 @@ void fDisk::addParticion(string add, string unit, string name, string path)
                 }
             }
         }
-        rewind(bfile2);
+        fseek(bfile2, 0, SEEK_SET);
         fwrite(&discoEditar, sizeof(Structs::MBR), 1, bfile2);
     }
     else

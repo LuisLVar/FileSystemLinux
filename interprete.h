@@ -26,9 +26,31 @@ public:
 
     std::string toLowerCase(std::string comando);
     void leerArchivo(std::string path);
-    Mount montaje;
     void crearReporte(string path, string name, string id);
 
+    //----------------------------- FASE 2 ----------------------------//
+    void fmkfs(std::vector<std::string> commandArray);
+    void flogin(std::vector<std::string> commandArray);
+    void flogout();
+    void fmkgrp(std::vector<std::string> commandArray);
+    void frmgrp(std::vector<std::string> commandArray);
+    void fmkusr(std::vector<std::string> commandArray);
+    void frmusr(std::vector<std::string> commandArray);
+    void fchmod(std::vector<std::string> commandArray);
+    void fmkfile(std::vector<std::string> commandArray);
+    void fcat(std::vector<std::string> commandArray);
+    void frem(std::vector<std::string> commandArray);
+    void fedit(std::vector<std::string> commandArray);
+    void fren(std::vector<std::string> commandArray);
+    void fmkdir(std::vector<std::string> commandArray);
+    void fcp(std::vector<std::string> commandArray);
+    void fmv(std::vector<std::string> commandArray);
+    void ffind(std::vector<std::string> commandArray);
+    void fchown(std::vector<std::string> commandArray);
+    void fchgrp(std::vector<std::string> commandArray);
+    void fpause();
+    void frecovery(std::vector<std::string> commandArray);
+    void floss(std::vector<std::string> commandArray);
 };
 
 #endif // INTERPRETE_H

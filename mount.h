@@ -29,6 +29,10 @@ public:
 
     discoMontado discos[26];
 
+    /*static discoMontado * getMontajes(){
+        return discos;
+    }*/
+
     void montarParticion(string path, string name);
     void leerMontajes();
     void desmontarParticion(string id);

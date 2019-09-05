@@ -1,5 +1,6 @@
 #include "mount.h"
 
+
 Mount::Mount()
 {
 }
@@ -15,7 +16,6 @@ void Mount::montarParticion(string path, string name)
         return;
     }
 
-    //cout << "Entro 2" << endl;
     bool existePath = false;
     int posicionPath = 0;
     for (int i = 0; i < 26; i++)

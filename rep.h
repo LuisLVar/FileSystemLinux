@@ -2,12 +2,13 @@
 #define REP_H
 
 #include "mount.h"
+#include "interprete.h"
 
 class Rep
 {
 public:
     Rep();
-    void crearReporte(string name, string path, string id);
+    void crearReporte(string path, string name, string id);
 };
 
 #endif // REP_H
