@@ -21,7 +21,11 @@ SOURCES += main.cpp \
     mkfs.cpp \
     login.cpp \
     group.cpp \
-    user.cpp
+    user.cpp \
+    archivo.cpp \
+    carpeta.cpp \
+    change.cpp \
+    ext3.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -46,4 +50,8 @@ HEADERS += \
     mkfs.h \
     login.h \
     group.h \
-    user.h
+    user.h \
+    archivo.h \
+    carpeta.h \
+    change.h \
+    ext3.h

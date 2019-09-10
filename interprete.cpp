@@ -12,6 +12,10 @@
 #include "login.h"
 #include "group.h"
 #include "user.h"
+#include "archivo.h"
+#include "carpeta.h"
+#include "change.h"
+#include "ext3.h"
 #include <fstream>
 #include <sstream>
 
@@ -682,7 +686,14 @@ void Interprete::fchmod(vector<string> commandArray)
         string comandoR = Interprete::toLowerCase(commandArray[i].substr(1, 1));
         if (comando == "path")
         {
-            path = Interprete::getAtributo(commandArray[i]);
+            if (commandArray[i].substr(6, 1) != "\"")
+            {
+                path = Interprete::getAtributo(commandArray[i]);
+            }
+            else
+            {
+                path = Interprete::getFullPath(commandArray, i);
+            }
         }
         else if (comando == "ugo=")
         {
@@ -701,50 +712,366 @@ void Interprete::fchmod(vector<string> commandArray)
 //------------------------------------------- ARCHIVOS -----------------------------------//
 void Interprete::fmkfile(vector<string> commandArray)
 {
+    string path = "";
+    string size = "";
+    string cont = "";
+    int p = 0;
+
+    for (int i = 0; i < commandArray.size(); i++)
+    {
+        string comando = Interprete::toLowerCase(commandArray[i].substr(1, 4));
+        string comandoP = Interprete::toLowerCase(commandArray[i].substr(1, 1));
+        if (comando == "path")
+        {
+            if (commandArray[i].substr(6, 1) != "\"")
+            {
+                path = Interprete::getAtributo(commandArray[i]);
+            }
+            else
+            {
+                path = Interprete::getFullPath(commandArray, i);
+            }
+        }
+        else if (comando == "size")
+        {
+            size = Interprete::getAtributo(commandArray[i]);
+        }
+        else if (comando == "cont")
+        {
+            cont = Interprete::getAtributo(commandArray[i]);
+        }
+        else if (comandoP == "p")
+        {
+            p = 1;
+        }
+    }
+
+    Archivo file;
+    file.makeFile(path, p, size, cont);
 }
 void Interprete::fcat(vector<string> commandArray)
 {
+    string path = "";
+
+    for (int i = 0; i < commandArray.size(); i++)
+    {
+        string comando = Interprete::toLowerCase(commandArray[i].substr(1, 4));
+        if (comando == "file")
+        {
+            if (commandArray[i].substr(6, 1) != "\"")
+            {
+                path = Interprete::getAtributo(commandArray[i]);
+            }
+            else
+            {
+                path = Interprete::getFullPath(commandArray, i);
+            }
+        }
+    }
+
+    Archivo file;
+    file.showContent(path);
 }
 void Interprete::frem(vector<string> commandArray)
 {
+    string path = "";
+
+    for (int i = 0; i < commandArray.size(); i++)
+    {
+        string comando = Interprete::toLowerCase(commandArray[i].substr(1, 4));
+        if (comando == "path")
+        {
+            if (commandArray[i].substr(6, 1) != "\"")
+            {
+                path = Interprete::getAtributo(commandArray[i]);
+            }
+            else
+            {
+                path = Interprete::getFullPath(commandArray, i);
+            }
+        }
+    }
+
+    Archivo file;
+    file.removeFile(path);
 }
 void Interprete::fedit(vector<string> commandArray)
 {
+    string path = "";
+    string cont = "";
+
+    for (int i = 0; i < commandArray.size(); i++)
+    {
+        string comando = Interprete::toLowerCase(commandArray[i].substr(1, 4));
+        if (comando == "path")
+        {
+            if (commandArray[i].substr(6, 1) != "\"")
+            {
+                path = Interprete::getAtributo(commandArray[i]);
+            }
+            else
+            {
+                path = Interprete::getFullPath(commandArray, i);
+            }
+        }
+        else if (comando == "cont")
+        {
+            cont = Interprete::getAtributo(commandArray[i]);
+        }
+    }
+
+    Archivo file;
+    file.editFile(path, cont);
 }
 
 //------------------------------------------- CARPETAS -----------------------------------//
 
 void Interprete::fren(vector<string> commandArray)
 {
+    string path = "";
+    string name = "";
+
+    for (int i = 0; i < commandArray.size(); i++)
+    {
+        string comando = Interprete::toLowerCase(commandArray[i].substr(1, 4));
+        if (comando == "path")
+        {
+            if (commandArray[i].substr(6, 1) != "\"")
+            {
+                path = Interprete::getAtributo(commandArray[i]);
+            }
+            else
+            {
+                path = Interprete::getFullPath(commandArray, i);
+            }
+        }
+        else if (comando == "name")
+        {
+            name = Interprete::getAtributo(commandArray[i]);
+        }
+    }
+
+    Carpeta directory;
+    directory.renameFile(path, name);
 }
 
 void Interprete::fmkdir(vector<string> commandArray)
 {
+    string path = "";
+    int p = 0;
+
+    for (int i = 0; i < commandArray.size(); i++)
+    {
+        string comando = Interprete::toLowerCase(commandArray[i].substr(1, 4));
+        string comandoP = Interprete::toLowerCase(commandArray[i].substr(1, 1));
+        if (comando == "path")
+        {
+            if (commandArray[i].substr(6, 1) != "\"")
+            {
+                path = Interprete::getAtributo(commandArray[i]);
+            }
+            else
+            {
+                path = Interprete::getFullPath(commandArray, i);
+            }
+        }
+        else if (comandoP == "p")
+        {
+            p = 1;
+        }
+    }
+
+    Carpeta directory;
+    directory.makeDirectory(path, p);
 }
 void Interprete::fcp(vector<string> commandArray)
 {
+    string path = "";
+    string dest = "";
+
+    for (int i = 0; i < commandArray.size(); i++)
+    {
+        string comando = Interprete::toLowerCase(commandArray[i].substr(1, 4));
+        if (comando == "path")
+        {
+            if (commandArray[i].substr(6, 1) != "\"")
+            {
+                path = Interprete::getAtributo(commandArray[i]);
+            }
+            else
+            {
+                path = Interprete::getFullPath(commandArray, i);
+            }
+        }
+        else if (comando == "dest")
+        {
+            if (commandArray[i].substr(6, 1) != "\"")
+            {
+                dest = Interprete::getAtributo(commandArray[i]);
+            }
+            else
+            {
+                dest = Interprete::getFullPath(commandArray, i);
+            }
+        }
+    }
+
+    Carpeta directory;
+    directory.copyFile(path, dest);
 }
 void Interprete::fmv(vector<string> commandArray)
 {
+    string path = "";
+    string dest = "";
+
+    for (int i = 0; i < commandArray.size(); i++)
+    {
+        string comando = Interprete::toLowerCase(commandArray[i].substr(1, 4));
+        if (comando == "path")
+        {
+            if (commandArray[i].substr(6, 1) != "\"")
+            {
+                path = Interprete::getAtributo(commandArray[i]);
+            }
+            else
+            {
+                path = Interprete::getFullPath(commandArray, i);
+            }
+        }
+        else if (comando == "dest")
+        {
+            if (commandArray[i].substr(6, 1) != "\"")
+            {
+                dest = Interprete::getAtributo(commandArray[i]);
+            }
+            else
+            {
+                dest = Interprete::getFullPath(commandArray, i);
+            }
+        }
+    }
+
+    Carpeta directory;
+    directory.moveFile(path, dest);
 }
 void Interprete::ffind(vector<string> commandArray)
 {
+    string path = "";
+    string name = "";
+
+    for (int i = 0; i < commandArray.size(); i++)
+    {
+        string comando = Interprete::toLowerCase(commandArray[i].substr(1, 4));
+        if (comando == "path")
+        {
+            if (commandArray[i].substr(6, 1) != "\"")
+            {
+                path = Interprete::getAtributo(commandArray[i]);
+            }
+            else
+            {
+                path = Interprete::getFullPath(commandArray, i);
+            }
+        }
+        else if (comando == "name")
+        {
+            name = Interprete::getAtributo(commandArray[i]);
+        }
+    }
+
+    Carpeta directory;
+    directory.findFile(path, name);
 }
 
 //------------------------------------------- CHANGES -----------------------------------//
 void Interprete::fchown(vector<string> commandArray)
 {
+    string path = "";
+    string usr = "";
+    int r = 0;
+
+    for (int i = 0; i < commandArray.size(); i++)
+    {
+        string comando = Interprete::toLowerCase(commandArray[i].substr(1, 4));
+        string comandoP = Interprete::toLowerCase(commandArray[i].substr(1, 1));
+        if (comando == "path")
+        {
+            if (commandArray[i].substr(6, 1) != "\"")
+            {
+                path = Interprete::getAtributo(commandArray[i]);
+            }
+            else
+            {
+                path = Interprete::getFullPath(commandArray, i);
+            }
+        }
+        else if (comando == "usr=")
+        {
+            usr = Interprete::getAtributo(commandArray[i]);
+        }
+        else if (comandoP == "r")
+        {
+            r = 1;
+        }
+    }
+
+    Change cambio;
+    cambio.changeOwner(path, r, usr);
 }
 void Interprete::fchgrp(vector<string> commandArray)
 {
+    string grp = "";
+    string usr = "";
+
+    for (int i = 0; i < commandArray.size(); i++)
+    {
+        string comando = Interprete::toLowerCase(commandArray[i].substr(1, 3));
+        if (comando == "usr")
+        {
+            usr = Interprete::getAtributo(commandArray[i]);
+        }
+        else if (comando == "grp")
+        {
+            grp = Interprete::getAtributo(commandArray[i]);
+        }
+    }
+
+    Change cambio;
+    cambio.changeGroup(usr, grp);
 }
 
 //------------------------------------------- EXT3/JOURNALING -----------------------------------//
 void Interprete::frecovery(vector<string> commandArray)
 {
+    string id = "";
+
+    for (int i = 0; i < commandArray.size(); i++)
+    {
+        string comando = Interprete::toLowerCase(commandArray[i].substr(1, 2));
+        if (comando == "id")
+        {
+            id = Interprete::getAtributo(commandArray[i]);
+        }
+    }
+
+    Ext3 fileSystem;
+    fileSystem.recoveryFS(id);
 }
 void Interprete::floss(vector<string> commandArray)
 {
+    string id = "";
+
+    for (int i = 0; i < commandArray.size(); i++)
+    {
+        string comando = Interprete::toLowerCase(commandArray[i].substr(1, 2));
+        if (comando == "id")
+        {
+            id = Interprete::getAtributo(commandArray[i]);
+        }
+    }
+
+    Ext3 fileSystem;
+    fileSystem.simulateLoss(id);
 }
 
 void Interprete::fpause()
